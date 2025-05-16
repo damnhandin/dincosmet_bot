@@ -1,0 +1,34 @@
+import asyncio
+
+import uvicorn
+from fastapi import FastAPI
+from environs import Env
+
+from app.app_factory import create_app, logger
+
+
+async def main():
+    """
+    Асинхронный запуск FastAPI-приложения с lifespan.
+    Это безопасный и чистый способ запуска при наличии async инициализации.
+    """
+    app: FastAPI = await create_app()
+
+    env = Env()
+    env.read_env(".env")
+    dincosmet_bot_port = env.int("DINCOSMET_BOT_PORT")
+    config = uvicorn.Config(
+        app=app,
+        host="0.0.0.0",
+        port=dincosmet_bot_port,
+        log_level="info",
+        reload=False  # Включи True в разработке (если не в Docker)
+    )
+
+    server = uvicorn.Server(config)
+    logger.info("Запуск микросервиса")
+    await server.serve()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

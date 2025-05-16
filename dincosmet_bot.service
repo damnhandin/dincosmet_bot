@@ -1,0 +1,14 @@
+[Unit]
+Description=Dincosmet Bot Microservice
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/dincosmet_bot_microservice
+ExecStart=/usr/bin/docker compose up
+ExecStop=/usr/bin/docker compose down
+Restart=always
+EnvironmentFile=/home/ubuntu/dincosmet_bot_microservice/.env
+
+[Install]
+WantedBy=multi-user.target
