@@ -1,11 +1,12 @@
 import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi import Request
 from pydantic import BaseModel
 from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from starlette.responses import JSONResponse
+from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
 
 from bot.bot import send_to_managers
 
@@ -42,6 +43,21 @@ def register_routes(app: FastAPI):
     @limiter.limit("3/5minutes")
     async def submit_lead(lead: Lead, request: Request):
         client_ip = get_real_ip(request)
-        logger.info(f"Заявка от {client_ip}: {lead.name} / {lead.phone}")
-        await send_to_managers(lead.name, lead.phone, bot=bot, manager_ids=manager_ids)
+
+        # 🔐 Базовая ручная проверка на случай обхода валидации
+        if not lead.name.strip() or len(lead.phone) < 5:
+            logger.warning(f"[{client_ip}] ❌ Некорректные данные: name='{lead.name}' phone='{lead.phone}'")
+            raise HTTPException(
+                status_code=HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Invalid data"
+            )
+
+        logger.info(f"[{client_ip}] 📩 Заявка: {lead.name} / {lead.phone}")
+
+        try:
+            await send_to_managers(lead.name, lead.phone, bot=bot, manager_ids=manager_ids)
+        except Exception as e:
+            logger.error(f"[{client_ip}] ❗ Ошибка при отправке заявки: {e}")
+            raise HTTPException(status_code=500, detail="Failed to process request")
+
         return {"status": "ok"}
