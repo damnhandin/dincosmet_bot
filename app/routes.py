@@ -46,7 +46,7 @@ def register_routes(app: FastAPI):
         for id in manager_ids:
             await bot.send_message(chat_id=id, text=f"{len(lead.phone)}")
         # 🔐 Базовая ручная проверка на случай обхода валидации
-        if not lead.name.strip() or len(lead.phone) <= 12:
+        if not lead.name.strip() or len(lead.phone) < 12:
             logger.warning(f"[{client_ip}] ❌ Некорректные данные: name='{lead.name}' phone='{lead.phone}'")
             raise HTTPException(
                 status_code=HTTP_422_UNPROCESSABLE_ENTITY,
