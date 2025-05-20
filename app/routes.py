@@ -11,8 +11,9 @@ class Lead(BaseModel):
 
 def register_routes(app: FastAPI):
     bot = app.state.bot
+    manager_ids = app.state.manager_ids
 
     @app.post("/submit")
     async def submit_lead(lead: Lead):
-        await send_to_managers(lead.name, lead.phone, bot=bot)
+        await send_to_managers(lead.name, lead.phone, bot=bot, manager_ids=manager_ids)
         return {"status": "ok"}

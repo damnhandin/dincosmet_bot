@@ -1,4 +1,7 @@
-[2025-05-20 08:48:41] [INFO] bot.services.broadcaster: Target [ID:798436130]: success
-[2025-05-20 08:48:41] [INFO] bot.services.broadcaster: 1 messages successful sent.
-[2025-05-20 08:48:41] [INFO] aiogram.dispatcher: Start polling
-[2025-05-20 08:48:41] [INFO] aiogram.dispatcher: Run polling for bot @dincosmet_bot id=7555905469 - 'Династия косметология'
+[2025-05-20 09:26:49] [INFO] bot.services.broadcaster: Target [ID:798436130]: success
+[2025-05-20 09:26:50] [INFO] bot.services.broadcaster: 1 messages successful sent.
+[2025-05-20 09:26:50] [INFO] aiogram.dispatcher: Start polling
+[2025-05-20 09:26:50] [INFO] aiogram.dispatcher: Run polling for bot @dincosmet_bot id=7555905469 - 'Династия косметология'
+[2025-05-20 09:29:49] [WARNING] aiogram.dispatcher: Received SIGTERM signal
+[2025-05-20 09:29:49] [INFO] aiogram.dispatcher: Polling stopped for bot @dincosmet_bot id=7555905469 - 'Династия косметология'
+[2025-05-20 09:29:49] [INFO] aiogram.dispatcher: Polling stopped

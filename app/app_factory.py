@@ -7,6 +7,7 @@ from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from environs import Env
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 from app.routes import register_routes
 
@@ -22,6 +23,7 @@ async def lifespan(app: FastAPI):
 
     # Настройка логики ошибок
     # setup_exception_handlers(app)
+
 
     bot_token = env.str("BOT_TOKEN")
 
@@ -40,5 +42,14 @@ async def lifespan(app: FastAPI):
 
 async def create_app() -> FastAPI:
     app = FastAPI(lifespan=lifespan)
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:8005",
+                       "http://127.0.0.1:8005"],
+        allow_credentials=True,
+        allow_methods=["POST"],
+        allow_headers=["Content-Type"],
+    )
 
     return app
