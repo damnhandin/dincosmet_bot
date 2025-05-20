@@ -21,7 +21,6 @@ class Lead(BaseModel):
 def get_real_ip(request: Request):
     x_forwarded_for = request.headers.get("x-forwarded-for")
     if x_forwarded_for:
-        logger.info(x_forwarded_for)
         return x_forwarded_for.split(',')[0].strip()
     return request.client.host
 
@@ -39,8 +38,8 @@ def register_routes(app: FastAPI):
     bot = app.state.bot
     manager_ids = app.state.manager_ids
 
-    @limiter.limit("3/5minutes")
     @app.post("/submit")
+    @limiter.limit("3/5minutes")
     async def submit_lead(lead: Lead, request: Request):
         client_ip = get_real_ip(request)
         logger.info(f"Заявка от {client_ip}: {lead.name} / {lead.phone}")
