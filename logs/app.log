@@ -3,3 +3,8 @@
 [2025-05-20 09:29:49] [INFO] app.app_factory: Lifespan shutdown started
 [2025-05-20 09:29:49] [ERROR] asyncio: Unclosed client session
 client_session: <aiohttp.client.ClientSession object at 0x7f8a877463d0>
+[2025-05-20 09:36:49] [INFO] root: Запуск микросервиса
+[2025-05-20 09:36:50] [INFO] app.app_factory: Lifespan init completed
+[2025-05-20 10:03:58] [INFO] app.app_factory: Lifespan shutdown started
+[2025-05-20 10:03:58] [ERROR] asyncio: Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x7f85da064610>
