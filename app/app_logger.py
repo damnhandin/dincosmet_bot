@@ -3,7 +3,7 @@ import os
 import sys
 from logging.handlers import RotatingFileHandler
 
-LOG_DIR = "/bot/logs"
+LOG_DIR = "/logs"
 LOG_FILE = "app.log"
 LOG_PATH = os.path.join(LOG_DIR, LOG_FILE)
 

@@ -1,10 +1,11 @@
 import asyncio
 
 import uvicorn
-from fastapi import FastAPI
 from environs import Env
+from fastapi import FastAPI
 
-from app.app_factory import create_app, logger
+from app.app_factory import create_app
+from app.app_logger import logger
 
 
 async def main():

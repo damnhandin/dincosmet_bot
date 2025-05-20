@@ -1,6 +1,9 @@
 import logging
 from contextlib import asynccontextmanager
 
+from aiogram import Bot
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from environs import Env
 from fastapi import FastAPI
@@ -20,14 +23,22 @@ async def lifespan(app: FastAPI):
     # Настройка логики ошибок
     # setup_exception_handlers(app)
 
+    bot_token = env.str("BOT_TOKEN")
+
     # Конфигурация переменных
     manager_ids = env.list("MANAGER_IDS", subcast=int)
     app.state.manager_ids = manager_ids
-
+    app.state.bot = Bot(token=bot_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     app.state.dincosmet_bot_url = f"http://{env.str('DINCOSMET_BOT_URL')}:{env.int('DINCOSMET_BOT_PORT')}"
+
+    register_routes(app)
+
+    logger.info("Lifespan init completed")
+    yield
+    logger.info("Lifespan shutdown started")
 
 
 async def create_app() -> FastAPI:
     app = FastAPI(lifespan=lifespan)
-    register_routes(app)
+
     return app

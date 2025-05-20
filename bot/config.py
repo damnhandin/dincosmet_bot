@@ -20,7 +20,7 @@ class TgBot:
         Creates the TgBot object from environment variables.
         """
         token = env.str("BOT_TOKEN")
-        admin_ids = env.list("ADMINS", subcast=int)
+        admin_ids = env.list("ADMIN_IDS", subcast=int)
         manager_ids = env.list("MANAGER_IDS", subcast=int)
         use_redis = env.bool("USE_REDIS")
         return TgBot(token=token,
