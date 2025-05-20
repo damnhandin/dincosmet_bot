@@ -39,7 +39,10 @@ def register_routes(app: FastAPI):
     bot = app.state.bot
     manager_ids = app.state.manager_ids
 
+    @limiter.limit("3/5minutes")
     @app.post("/submit")
-    async def submit_lead(lead: Lead):
+    async def submit_lead(lead: Lead, request: Request):
+        client_ip = get_real_ip(request)
+        logger.info(f"Заявка от {client_ip}: {lead.name} / {lead.phone}")
         await send_to_managers(lead.name, lead.phone, bot=bot, manager_ids=manager_ids)
         return {"status": "ok"}
