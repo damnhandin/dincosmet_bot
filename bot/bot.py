@@ -11,4 +11,4 @@ async def send_to_managers(name: str, phone: str, bot: Bot, manager_ids: List[in
         try:
             await bot.send_message(manager_id, text)
         except Exception as e:
-            logger.exception(f"❌ Ошибка отправки менеджеру {manager_id}: {e}")
+            logger.exception(f"❌ Ошибка отправки менеджеру {manager_id}: {e}", exc_info=True)

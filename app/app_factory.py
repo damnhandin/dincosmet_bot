@@ -30,6 +30,8 @@ async def lifespan(app: FastAPI):
 
     # Конфигурация переменных
     manager_ids = env.list("MANAGER_IDS", subcast=int)
+    admin_ids = env.list("ADMIN_IDS", subcast=int)
+    app.state.admin_ids = admin_ids
     app.state.manager_ids = manager_ids
     app.state.bot = Bot(token=bot_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     app.state.dincosmet_bot_url = f"http://{env.str('DINCOSMET_BOT_URL')}:{env.int('DINCOSMET_BOT_PORT')}"

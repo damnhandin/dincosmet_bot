@@ -11,6 +11,7 @@ from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
 from bot.bot import send_to_managers
 
 logger = logging.getLogger(__name__)
+MAX_TELEGRAM_MESSAGE_LENGTH = 4000  # запас от 4096
 
 
 class Lead(BaseModel):
@@ -38,6 +39,7 @@ def register_routes(app: FastAPI):
 
     bot = app.state.bot
     manager_ids = app.state.manager_ids
+    admin_ids = app.state.admin_ids
 
     @app.post("/submit")
     @limiter.limit("3/5minutes")
@@ -56,7 +58,45 @@ def register_routes(app: FastAPI):
         try:
             await send_to_managers(lead.name, lead.phone, bot=bot, manager_ids=manager_ids)
         except Exception as e:
-            logger.error(f"[{client_ip}] ❗ Ошибка при отправке заявки: {e}")
+            error_message = f"[{client_ip}] ❗ Ошибка при отправке заявки: {str(e)}"
+            await handle_error_report(error_message, bot, admin_ids)
             raise HTTPException(status_code=500, detail="Failed to process request")
 
         return {"status": "ok"}
+
+    async def handle_error_report(error_message: str, bot, admin_ids: list[str]):
+        logger.error(f"📩 Получена ошибка: {error_message}", exc_info=True)
+
+        chunks = split_text_into_chunks(error_message, MAX_TELEGRAM_MESSAGE_LENGTH - 50)
+
+        for admin_id in admin_ids:
+            for i, chunk in enumerate(chunks):
+                try:
+                    await bot.send_message(
+                        admin_id,
+                        f"⚠️ <b>Ошибка в сервисе (часть {i + 1} из {len(chunks)}):</b>\n<pre>{chunk}</pre>"
+                    )
+                except Exception as e:
+                    logger.error(f"❌ Не удалось отправить сообщение в Telegram админу {admin_id}: {e}", exc_info=True)
+
+    @app.post("/report-error")
+    async def report_error(request: Request):
+        try:
+            data = await request.json()
+            error_message = data.get("error")
+
+            if not error_message:
+                return JSONResponse(content={"detail": "Поле 'error' обязательно"}, status_code=400)
+
+            await handle_error_report(error_message, bot, admin_ids)
+            return {"status": "received"}
+        except Exception as e:
+            logger.exception("Ошибка при обработке отчёта об ошибке", exc_info=True)
+            return JSONResponse(content={"detail": "Ошибка сервера при обработке отчёта"}, status_code=500)
+
+    def split_text_into_chunks(text: str, max_length: int) -> list[str]:
+        """
+        Делит длинный текст на части длиной не более max_length.
+        Гарантирует, что разбиение не обрезает строку посередине.
+        """
+        return [text[i:i + max_length] for i in range(0, len(text), max_length)]
