@@ -59,7 +59,7 @@ def register_routes(app: FastAPI):
         logger.info(f"[{client_ip}] 📩 Заявка: {lead.name} / {lead.phone}")
 
         try:
-            if lead.name.upper() == "проверка".upper():
+            if lead.phone == "+79999999999" and lead.name.upper() == "проверка".upper():
                 await broadcaster.broadcast(
                     bot, admin_ids,
                     text = f"📥 <b>Новая проверочная заявка</b>\n👤 Имя: {lead.name}\n📞 Телефон: {lead.phone}")

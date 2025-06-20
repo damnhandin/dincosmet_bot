@@ -78,3 +78,32 @@ client_session: <aiohttp.client.ClientSession object at 0x7ffa60095b10>
 [2025-06-20 18:01:06] [ERROR] asyncio: Unclosed connector
 connections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x7f0fef480c90>, 3107.264198433)])']
 connector: <aiohttp.connector.TCPConnector object at 0x7f0fef45a310>
+[2025-06-20 18:04:05] [INFO] root: Запуск микросервиса
+[2025-06-20 18:04:05] [INFO] app.routes: Регистрация роутов
+[2025-06-20 18:04:05] [INFO] app.app_factory: Lifespan init completed
+[2025-06-20 18:04:11] [INFO] app.routes: Пришла заявка 2025-06-20 18:04:11.008122
+[2025-06-20 18:04:11] [INFO] app.routes: [172.18.0.1] 📩 Заявка: Проверка / +79999999999
+[2025-06-20 18:04:11] [INFO] bot.services.broadcaster: Target [ID:798436130]: success
+[2025-06-20 18:04:11] [INFO] bot.services.broadcaster: 1 messages successful sent.
+[2025-06-20 18:04:30] [INFO] app.routes: Пришла заявка 2025-06-20 18:04:30.044310
+[2025-06-20 18:04:30] [INFO] app.routes: [172.18.0.1] 📩 Заявка: вфыв / +71321232131
+[2025-06-20 18:05:15] [INFO] app.app_factory: Lifespan shutdown started
+[2025-06-20 18:05:15] [ERROR] asyncio: Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x7fa7dc611290>
+[2025-06-20 18:05:24] [INFO] root: Запуск микросервиса
+[2025-06-20 18:05:24] [INFO] app.routes: Регистрация роутов
+[2025-06-20 18:05:24] [INFO] app.app_factory: Lifespan init completed
+[2025-06-20 18:05:31] [INFO] app.routes: Пришла заявка 2025-06-20 18:05:31.404992
+[2025-06-20 18:05:31] [INFO] app.routes: [172.18.0.1] 📩 Заявка: ПроверКА / +79999999991
+[2025-06-20 18:05:40] [INFO] app.routes: Пришла заявка 2025-06-20 18:05:40.488543
+[2025-06-20 18:05:40] [INFO] app.routes: [172.18.0.1] 📩 Заявка: Проверка / +79999999999
+[2025-06-20 18:05:40] [INFO] bot.services.broadcaster: Target [ID:798436130]: success
+[2025-06-20 18:05:40] [INFO] bot.services.broadcaster: 1 messages successful sent.
+[2025-06-20 18:05:53] [INFO] app.routes: Пришла заявка 2025-06-20 18:05:53.999386
+[2025-06-20 18:05:54] [INFO] app.routes: [172.18.0.1] 📩 Заявка: аывфавыфа / +73243243243
+[2025-06-20 18:05:58] [WARNING] slowapi: ratelimit 3 per 5 minute (172.18.0.1) exceeded at endpoint: /api/submit
+[2025-06-20 18:06:05] [WARNING] slowapi: ratelimit 3 per 5 minute (172.18.0.1) exceeded at endpoint: /api/submit
+[2025-06-20 18:06:09] [INFO] app.app_factory: Lifespan shutdown started
+[2025-06-20 18:06:09] [ERROR] asyncio: Unclosed connector
+connections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x7f2a3d24b2a0>, 3400.010794215)])']
+connector: <aiohttp.connector.TCPConnector object at 0x7f2a3d2b61d0>

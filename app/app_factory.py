@@ -50,8 +50,6 @@ async def create_app() -> FastAPI:
         CORSMiddleware,
         allow_origins=["http://localhost:8005",
                        "http://127.0.0.1:8005",
-                       "http://localhost:8001",
-                       "http://127.0.0.1:8001",
                        "https://dincosmet.ru",
                        "https://www.dincosmet.ru"],
         allow_credentials=True,
