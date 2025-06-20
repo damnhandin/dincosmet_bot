@@ -9,6 +9,7 @@ from starlette.responses import JSONResponse
 from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
 from datetime import datetime
 from bot.bot import send_to_managers
+from bot.services import broadcaster
 
 logger = logging.getLogger(__name__)
 MAX_TELEGRAM_MESSAGE_LENGTH = 4000  # запас от 4096
@@ -44,7 +45,7 @@ def register_routes(app: FastAPI):
     @app.post("/submit")
     @limiter.limit("3/5minutes")
     async def submit_lead(lead: Lead, request: Request):
-        timestamp = datetime.now().timestamp()
+        timestamp = datetime.now()
         logger.info(f"Пришла заявка {timestamp}")
         client_ip = get_real_ip(request)
         # 🔐 Базовая ручная проверка на случай обхода валидации
@@ -58,7 +59,12 @@ def register_routes(app: FastAPI):
         logger.info(f"[{client_ip}] 📩 Заявка: {lead.name} / {lead.phone}")
 
         try:
-            await send_to_managers(lead.name, lead.phone, bot=bot, manager_ids=manager_ids)
+            if lead.name.upper() == "проверка".upper():
+                await broadcaster.broadcast(
+                    bot, admin_ids,
+                    text = f"📥 <b>Новая проверочная заявка</b>\n👤 Имя: {lead.name}\n📞 Телефон: {lead.phone}")
+            else:
+                await send_to_managers(lead.name, lead.phone, bot=bot, manager_ids=manager_ids)
         except Exception as e:
             error_message = f"[{client_ip}] ❗ Ошибка при отправке заявки: {str(e)}"
             await handle_error_report(error_message, bot, admin_ids)
