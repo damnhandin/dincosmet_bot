@@ -45,8 +45,8 @@ def register_routes(app: FastAPI):
     @app.post("/submit")
     @limiter.limit("3/5minutes")
     async def submit_lead(lead: Lead, request: Request):
-        timestamp = datetime.now()
-        logger.info(f"Пришла заявка {timestamp}")
+        lead_date = datetime.now()
+        logger.info(f"Пришла заявка {lead.name} {lead.phone}, {lead_date}")
         client_ip = get_real_ip(request)
         # 🔐 Базовая ручная проверка на случай обхода валидации
         if not lead.name.strip() or len(lead.phone) != 12:
