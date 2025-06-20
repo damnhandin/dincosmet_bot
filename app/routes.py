@@ -7,7 +7,7 @@ from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
-
+from datetime import datetime
 from bot.bot import send_to_managers
 
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ def register_routes(app: FastAPI):
         status_code=429,
         content={"error": "Слишком много заявок. Попробуйте позже."}
     ))
-
+    logger.info("Регистрация роутов")
     bot = app.state.bot
     manager_ids = app.state.manager_ids
     admin_ids = app.state.admin_ids
@@ -44,6 +44,8 @@ def register_routes(app: FastAPI):
     @app.post("/submit")
     @limiter.limit("3/5minutes")
     async def submit_lead(lead: Lead, request: Request):
+        timestamp = datetime.now().timestamp()
+        logger.info(f"Пришла заявка {timestamp}")
         client_ip = get_real_ip(request)
         # 🔐 Базовая ручная проверка на случай обхода валидации
         if not lead.name.strip() or len(lead.phone) != 12:
